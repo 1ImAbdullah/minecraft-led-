@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Minecraft LED</title>
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <style>
+    body {
+      background: #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: sans-serif;
+      color: white;
+    }
+    .bulb {
+      width: 120px;
+      height: 120px;
+      border-radius: 50% 50% 40% 40%;
+      background: radial-gradient(circle at 40% 35%, #555, #222);
+      transition: all 0.4s ease;
+    }
+    .bulb.on {
+      background: radial-gradient(circle at 40% 35%, #fff9c4, #ffcc00);
+      box-shadow: 0 0 60px #ffcc00, 0 0 120px #ffaa00;
+    }
+    .base {
+      width: 60px;
+      height: 30px;
+      background: #888;
+      margin: 0 auto;
+      border-radius: 0 0 8px 8px;
+    }
+    .thread {
+      width: 4px;
+      height: 30px;
+      background: #666;
+      margin: 0 auto;
+    }
+    #status { margin-top: 20px; color: #aaa; }
+  </style>
+</head>
+<body>
+  <h1>⚡ Minecraft LED</h1>
+  <div class="thread"></div>
+  <div class="bulb" id="bulb"></div>
+  <div class="base"></div>
+  <p id="status">Waiting...</p>
+  <script>
+    const socket = io();
+    const bulb = document.getElementById("bulb");
+    const status = document.getElementById("status");
+    socket.on("led_update", (data) => {
+      if (data.state === "on") {
+        bulb.classList.add("on");
+        status.textContent = "💡 Lever is ON";
+      } else {
+        bulb.classList.remove("on");
+        status.textContent = "🔌 Lever is OFF";
+      }
+    });
+  </script>
+</body>
+</html>
